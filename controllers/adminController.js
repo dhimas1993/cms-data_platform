@@ -1,4 +1,5 @@
 const Admin = require('../models/admin.model')
+const User = require('../models/user.model')
 
 module.exports = {
     viewDashboard : (req,res) => {
@@ -88,12 +89,58 @@ module.exports = {
         }
     },
 
-    viewVenture : (req,res) => {
+    viewUser : async (req,res) => {
         try {
             const currentMenu = req.route.path.toString();
-            res.render('admin/venture/view_venture',{currentMenu})
+            const alertMessage = req.flash('alertMessage')
+            const alertStatus = req.flash('alertStatus')
+            const alert = {message: alertMessage, status: alertStatus}
+            const user = await User.find()
+            res.render('admin/user/view_user',{
+                currentMenu,
+                alert,
+                user
+            })
         } catch (error) {
             console.log(error.message)
+        }
+    },
+    addUser: async (req,res) => {
+        try {
+            const {name, companyName, jobPosition, email, password} = req.body
+            const user_exist = await User.find({ email : email })
+            if(!user_exist[0]){
+                await User.create({
+                    name, companyName, jobPosition, email, password
+                })
+            } else {
+                res.send('Email sudah ada')
+            }
+            req.flash('alertMessage', 'Success add admin')
+            req.flash('alertStatus', 'success')
+            res.redirect('/admin/admin')
+        } catch (error) {
+            req.flash('alertMessage', `${error.message}`)
+            req.flash('alertStatus', 'danger')
+            res.redirect('/admin/admin')
+        }
+    },
+    editUser: async (req,res) => {
+        try {
+            const {id,subscribe} = req.body
+            const user = await User.findOne({ _id : id });
+            // No,Name,companyName,jobPosition,Email,Status,Subscribe,Date,Action,
+            
+            user.subscribe = subscribe
+            await user.save()
+            // res.send(req.body)
+            req.flash('alertMessage', "SUCCESS EDIT")
+            req.flash('alertStatus', 'success')
+            res.redirect('/admin/user')
+        } catch (error) {
+            req.flash('alertMessage', `${error.message}`)
+            req.flash('alertStatus', 'danger')
+            res.redirect('/admin/user')
         }
     },
 

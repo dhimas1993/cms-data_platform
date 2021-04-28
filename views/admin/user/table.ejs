@@ -1,0 +1,71 @@
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Name</th>
+                        <th>Company Name</th>
+                        <th>Job Position</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Subscribe</th>
+                        <th>Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>No</th>
+                        <th>Name</th>
+                        <th>Company Name</th>
+                        <th>Job Position</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Subscribe</th>
+                        <th>Date</th>
+                        <th>Action</th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    <% for(let i =0; i < user.length; i++) {%>
+                        <tr class="center">
+                            <td><%= i + 1%></td>
+                            <td><%= user[i].name %></td>
+                            <td><%= user[i].companyName %></td>
+                            <td><%= user[i].jobPosition %></td>
+                            <td><%= user[i].email %></td>
+                            <td><%= user[i].status %></td>
+                            <td><%= user[i].subscribe %></td>
+                            <td><%= user[i].date.getDay() + " - " + (user[i].date.getMonth() + 1) + " - " + user[i].date.getFullYear()  %></td>
+                            <td>
+                                <form action="/user/user/<%= user[i].id %>?_method=DELETE" method="POST">
+                                    <a  
+                                        href="javascript:void()"
+                                        type="button"
+                                        class="btn btn-warning btn-sm btn-circle button-update"
+                                        data-id="<%= user[i].id %>"
+                                        data-name="<%= user[i].name %>"
+                                        data-subscribe="<%= user[i].subscribe %>"
+                                    >
+                                        <i class="fas fa-fw fa-edit"></i>
+                                    </a>
+                                    
+                                    <!-- Button trigger modal -->
+                                    <!-- <button 
+                                        type="submit" 
+                                        href="" 
+                                        class=" btn btn-danger btn-sm btn-circle"
+                                        type="button"  data-toggle="modal" data-target="#exampleModal">
+                                        <i class="fas fa-fw fa-trash"></i>
+                                    </button> -->
+                                </form>
+                            </td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
