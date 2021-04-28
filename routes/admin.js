@@ -16,6 +16,11 @@ router.get('/subscribe', adminController.viewSubscribes)
 router.post('/subscribe', adminController.addSubscribes)
 router.put('/subscribe', adminController.editSubscribes)
 
+router.get('/link', adminController.viewLink)
+router.post('/link', adminController.addLink)
+router.put('/link', adminController.editLink)
+router.delete('/link/:id', adminController.deleteLink)
+
 router.get('/media', adminController.viewMedia)
 router.get('/category-media', adminController.viewCategoryMedia)
 
