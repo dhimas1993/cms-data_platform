@@ -15,9 +15,15 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
+                    <% if(alert.message != "") {%>
+                        <div class="alert alert-<%= alert.status %>" role="alert">
+                            <%= alert.message %>
+                        </div>
+                    <% } %>
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-4 text-gray-800">Portofolios</h1>
+                    <h1 class="h3 mb-4 text-gray-800">Subscribe Type</h1>
+                    <%- include('./table.ejs') %>
 
                 </div>
                 <!-- /.container-fluid -->
@@ -59,3 +65,15 @@
     </div>
 
     <%- include('../../partials/js.ejs') %>
+    <%- include('./add_modal.ejs') %>
+    <%- include('./edit_modal.ejs') %>
+
+    <script>
+        $('#dataTable').on('click', '.button-update', function(){
+            let id = $(this).data('id');
+            let name = $(this).data('name');
+            $('#edit-modal').modal('show');
+            $('.id').val(id)
+            $('.name').val(name)
+        })
+    </script>

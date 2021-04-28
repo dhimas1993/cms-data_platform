@@ -12,7 +12,10 @@ router.get('/user', adminController.viewUser)
 router.post('/user', adminController.addUser)
 router.put('/user', adminController.editUser)
 
-router.get('/portofolio', adminController.viewPortofolio)
+router.get('/subscribe', adminController.viewSubscribes)
+router.post('/subscribe', adminController.addSubscribes)
+router.put('/subscribe', adminController.editSubscribes)
+
 router.get('/media', adminController.viewMedia)
 router.get('/category-media', adminController.viewCategoryMedia)
 

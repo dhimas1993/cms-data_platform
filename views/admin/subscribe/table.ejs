@@ -1,0 +1,61 @@
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-modal">
+            Add Subscribe Type
+        </button>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Name</th>
+                        <th>Link</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>No</th>
+                        <th>Name</th>
+                        <th>Link</th>
+                        <th>Action</th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    <% for(let i =0; i < subscribe.length; i++) {%>
+                        <tr class="center">
+                            <td><%= i + 1%></td>
+                            <td><%= subscribe[i].name %></td>
+                            <td><%= subscribe[i].link %></td>
+                            <td>
+                                <form action="/admin/subscribe/<%= subscribe[i].id %>?_method=DELETE" method="POST">
+                                    <a  
+                                        href="javascript:void()"
+                                        type="button"
+                                        class="btn btn-warning btn-sm btn-circle button-update"
+                                        data-id="<%= subscribe[i].id %>"
+                                        data-name="<%= subscribe[i].name %>"
+                                    >
+                                        <i class="fas fa-fw fa-edit"></i>
+                                    </a>
+                                    
+                                    <!-- Button trigger modal -->
+                                    <!-- <button 
+                                        type="submit" 
+                                        href="" 
+                                        class=" btn btn-danger btn-sm btn-circle"
+                                        type="button"  data-toggle="modal" data-target="#exampleModal">
+                                        <i class="fas fa-fw fa-trash"></i>
+                                    </button> -->
+                                </form>
+                            </td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,5 +1,6 @@
 const Admin = require('../models/admin.model')
 const User = require('../models/user.model')
+const Subscribe = require('../models/subscribe.model')
 
 module.exports = {
     viewDashboard : (req,res) => {
@@ -129,7 +130,6 @@ module.exports = {
         try {
             const {id,subscribe} = req.body
             const user = await User.findOne({ _id : id });
-            // No,Name,companyName,jobPosition,Email,Status,Subscribe,Date,Action,
             
             user.subscribe = subscribe
             await user.save()
@@ -144,12 +144,52 @@ module.exports = {
         }
     },
 
-    viewPortofolio : (req,res) => {
+    viewSubscribes : async (req,res) => {
         try {
             const currentMenu = req.route.path.toString();
-            res.render('admin/portofolio/view_portofolio',{currentMenu})
+            const alertMessage = req.flash('alertMessage')
+            const alertStatus = req.flash('alertStatus')
+            const alert = {message: alertMessage, status: alertStatus}
+            const subscribe = await Subscribe.find()
+            res.render('admin/subscribe/view_subscribe',{
+                currentMenu,
+                alert,
+                subscribe
+            })
         } catch (error) {
             console.log(error.message)
+        }
+    },
+    addSubscribes: async (req,res) => {
+        try {
+            const {name} = req.body
+            await Subscribe.create({
+                name
+            })
+            req.flash('alertMessage', 'Success add admin')
+            req.flash('alertStatus', 'success')
+            res.redirect('/admin/subscribe')
+        } catch (error) {
+            req.flash('alertMessage', `${error.message}`)
+            req.flash('alertStatus', 'danger')
+            res.redirect('/admin/subscribe')
+        }
+    },
+    editSubscribes: async (req,res) => {
+        try {
+            const {id,name} = req.body
+            const subscribe = await Subscribe.findOne({ _id : id });
+            
+            subscribe.name = name
+            await subscribe.save()
+            
+            req.flash('alertMessage', "SUCCESS EDIT")
+            req.flash('alertStatus', 'success')
+            res.redirect('/admin/subscribe')
+        } catch (error) {
+            req.flash('alertMessage', `${error.message}`)
+            req.flash('alertStatus', 'danger')
+            res.redirect('/admin/subscribe')
         }
     },
 
