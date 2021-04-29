@@ -21,6 +21,11 @@ router.post('/link', adminController.addLink)
 router.put('/link', adminController.editLink)
 router.delete('/link/:id', adminController.deleteLink)
 
+router.get('/request-connect', adminController.viewRequestConnect)
+router.post('/request-connect', adminController.addRequestConnect)
+router.put('/request-connect', adminController.editRequestConnect)
+router.delete('/request-connect/:id', adminController.deleteRequestConnect)
+
 router.get('/media', adminController.viewMedia)
 router.get('/category-media', adminController.viewCategoryMedia)
 

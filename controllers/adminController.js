@@ -2,6 +2,7 @@ const Admin = require('../models/admin.model')
 const User = require('../models/user.model')
 const Subscribe = require('../models/subscribe.model')
 const Link = require('../models/link.model')
+const RequestConnect = require('../models/request_connect')
 
 module.exports = {
     viewDashboard : (req,res) => {
@@ -270,6 +271,85 @@ module.exports = {
             req.flash('alertMessage', `${error.message}`)
             req.flash('alertStatus', 'danger')
             res.redirect('/admin/link')
+        }
+    },
+
+    viewRequestConnect : async (req,res) => {
+        try {
+            const currentMenu = req.route.path.toString();
+            const alertMessage = req.flash('alertMessage')
+            const alertStatus = req.flash('alertStatus')
+            const alert = {message: alertMessage, status: alertStatus}
+            const subscribe = await Subscribe.find()
+            const link = await RequestConnect.find().populate('subscribe')
+
+            // console.log(link)
+            res.render('admin/request_connect/view_requestConnect',{
+                currentMenu,
+                alert,
+                subscribe,
+                link
+            })
+        } catch (error) {
+            console.log(error.message)
+        }
+    },
+    addRequestConnect : async (req,res) => {
+        try {
+            const {subscribe, name, link} = req.body
+
+            await RequestConnect.create({
+                name, link, subscribe
+            })
+            
+            req.flash('alertMessage', "SUCCESS ADD")
+            req.flash('alertStatus', 'success')
+            res.redirect('/admin/request-connect')
+        } catch (error) {
+            req.flash('alertMessage', `${error.message}`)
+            req.flash('alertStatus', 'danger')
+            res.redirect('/admin/request-connect')
+        }
+    },
+    editRequestConnect: async (req,res) => {
+        try {
+            const {id, name,link, subscribe} = req.body
+            const _link = await RequestConnect.findOne({ _id : id });
+            
+            if(subscribe){
+                _link.name = name
+                _link.link = link
+                _link.subscribe = subscribe
+                await _link.save()
+            } else {
+                _link.name = name
+                _link.link = link
+                await _link.save()
+            }
+            
+            req.flash('alertMessage', "SUCCESS EDIT")
+            req.flash('alertStatus', 'success')
+            res.redirect('/admin/request-connect')
+        } catch (error) {
+            req.flash('alertMessage', `${error.message}`)
+            req.flash('alertStatus', 'danger')
+            res.redirect('/admin/request-connect')
+        }
+    },
+    deleteRequestConnect: async(req,res) => {
+        try {
+            const {id} = req.params
+            const link = await RequestConnect.findOne({
+                _id : id
+            })
+            await link.remove()
+            req.flash('alertMessage', "SUCCESS EDIT")
+            req.flash('alertStatus', 'success')
+            res.redirect('/admin/request-connect')
+        } catch (error) {
+            req.flash('alertMessage', `${error.message}`)
+            req.flash('alertStatus', 'danger')
+            res.redirect('/admin/request-connect')
         }
     },
 
