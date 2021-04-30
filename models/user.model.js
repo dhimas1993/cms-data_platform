@@ -28,6 +28,10 @@ const UserSchema = new Schema({
         required: true,
         default: 'not active'
     },
+    token:{
+        type: String,
+        required: true
+    },
     subscribe:{
         type: String,
         required: true,

@@ -345,11 +345,11 @@ module.exports = {
             await link.remove()
             req.flash('alertMessage', "SUCCESS EDIT")
             req.flash('alertStatus', 'success')
-            res.redirect('/admin/request-connect')
+            res.redirect('/admin/link')
         } catch (error) {
             req.flash('alertMessage', `${error.message}`)
             req.flash('alertStatus', 'danger')
-            res.redirect('/admin/request-connect')
+            res.redirect('/admin/link')
         }
     },
 
