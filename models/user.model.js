@@ -33,9 +33,10 @@ const UserSchema = new Schema({
         required: true
     },
     subscribe:{
-        type: String,
-        required: true,
-        default: 'free'
+        type: Schema.Types.ObjectId,
+        ref: 'subscribe',
+        default: '6088fd69f07f796bc1a3080d',
+        require: true
     },
     date:{
         type: Date,

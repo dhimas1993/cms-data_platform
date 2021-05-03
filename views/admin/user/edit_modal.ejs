@@ -10,17 +10,19 @@
         </div>
         <form action="/admin/user?_method=PUT" method="POST">
             <div class="modal-body">
-                <div class="form-group">
-                    <label for="name">Name</label>
-                    <input class="form-control name" name="name" type="text" placeholder="Input Name" disabled>
-                </div>
-                <div class="form-group">
-                    <label for="subscribe">Example select</label>
-                    <select class="form-control" name="subscribe" id="subscribe">
-                        <option value="false">false</option>
-                        <option value="true">true</option>
-                    </select>
-                </div>
+              <div class="form-group">
+                <label for="name">Name</label>
+                <input class="form-control name" name="name" type="text" placeholder="Input Name" disabled>
+              </div>
+              <div class="form-group">
+                <label for="name">Status</label>
+                <select name="subscribe" class="custom-select subscribe.id" id="inputGroupSelect03">
+                  <% for (let i = 0, length = subscribe.length; i < length; i ++) { %>
+                    <% const item = subscribe[i]; %>
+                    <option selected value="<%= item.id %>"><%= item.name %></option> 
+                  <% } %>
+                </select>
+              </div>
             </div>
             <div class="modal-footer">
                 <input type="hidden" class="id" name="id">

@@ -37,7 +37,7 @@
                             <td><%= user[i].jobPosition %></td>
                             <td><%= user[i].email %></td>
                             <td><%= user[i].status %></td>
-                            <td><%= user[i].subscribe %></td>
+                            <td><%= user[i].subscribe.name %></td>
                             <td><%= user[i].date.getDay() + " - " + (user[i].date.getMonth() + 1) + " - " + user[i].date.getFullYear()  %></td>
                             <td>
                                 <form action="/user/user/<%= user[i].id %>?_method=DELETE" method="POST">

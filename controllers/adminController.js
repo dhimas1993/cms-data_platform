@@ -5,10 +5,16 @@ const Link = require('../models/link.model')
 const RequestConnect = require('../models/request_connect')
 
 module.exports = {
-    viewDashboard : (req,res) => {
+    viewDashboard : async (req,res) => {
         try {
             const currentMenu = req.route.path.toString();
-            res.render('admin/dashboard/view_dashboard', {currentMenu})
+            const all_user = await User.find()
+            const user_pro = await User.find({ subscribe: "PRO" })
+            const user_free = await User.find({ subscribe: "FREE" })
+            console.log(all_user)
+            res.render('admin/dashboard/view_dashboard', {
+                currentMenu
+            })
         } catch (error) {
             console.log(error.message)
         }
@@ -98,8 +104,10 @@ module.exports = {
             const alertMessage = req.flash('alertMessage')
             const alertStatus = req.flash('alertStatus')
             const alert = {message: alertMessage, status: alertStatus}
-            const user = await User.find()
+            const user = await User.find().populate('subscribe')
+            const subscribe = await Subscribe.find()
             res.render('admin/user/view_user',{
+                subscribe,
                 currentMenu,
                 alert,
                 user
@@ -135,7 +143,7 @@ module.exports = {
             
             user.subscribe = subscribe
             await user.save()
-            // res.send(req.body)
+            
             req.flash('alertMessage', "SUCCESS EDIT")
             req.flash('alertStatus', 'success')
             res.redirect('/admin/user')
