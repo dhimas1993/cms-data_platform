@@ -10,10 +10,10 @@ module.exports = {
     login : async (req,res) => {
         try {
             const {email} = req.body
-            const response = await User.find({ email : email })
-
-            if(response[0]){
-                res.status(200).json(response)
+            const response = await User.findOne({ email : email })
+            
+            if(response !== null ){
+                res.status(200).json('SUCCESS')
             } else {
                 res.status(201).json('FAIL')
             }
@@ -54,7 +54,7 @@ module.exports = {
                         <a href="${process.env.WEB_URI}/confirmationCode/${token}">Click Here !!</a> 
                     </div>
                 `
-            };            
+            };
             
             if(user_exist == null){
                 const post = await User.create({
@@ -80,5 +80,22 @@ module.exports = {
         } catch (error) {
             res.status(500).json(error.message)
         }
-    }
+    },
+
+    confirmationCode : async (req,res) => {
+        try {
+            const {id} = req.params
+            const response = await User.findOne({token : id})
+            if(response){
+                response.status = 'active'
+                response.save()
+                
+                res.status(200).json('SUCCESS')
+            } else {
+                res.status(201).json('FAIL')
+            }
+        } catch (error) {
+            res.status(500).json(error.message)
+        }
+    }   
 }

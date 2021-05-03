@@ -4,6 +4,6 @@ const adminController = require('../controllers/adminController')
 
 router.post('/login', userController.login)
 router.post('/register', userController.register)
-// router.post('/register', adminController.addUser)
+router.post('/confirmationCode/:id', userController.confirmationCode)
 
 module.exports = router
