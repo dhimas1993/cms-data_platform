@@ -11,8 +11,9 @@ const LinkSchema = new Schema({
         required: true
     },
     subscribe: {
-        type: String,
-        required: true
+        type: Schema.Types.ObjectId,
+        ref: 'subscribe',
+        require: true
     },
     date:{
         type: Date,

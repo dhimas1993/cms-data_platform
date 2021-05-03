@@ -19,7 +19,7 @@
                 <select name="subscribe" class="custom-select subscribe.id" id="inputGroupSelect03">
                   <% for (let i = 0, length = subscribe.length; i < length; i ++) { %>
                     <% const item = subscribe[i]; %>
-                    <option selected value="<%= item.id %>"><%= item.name %></option> 
+                    <option <% subscribe.id = item.id ? "selected" : null %> value="<%= item.id %>"><%= item.name %></option> 
                   <% } %>
                 </select>
               </div>

@@ -212,7 +212,7 @@ module.exports = {
             const subscribe = await Subscribe.find()
             const link = await Link.find().populate('subscribe')
 
-            // console.log(link)
+            console.log(link)
             res.render('admin/link/view_link',{
                 currentMenu,
                 alert,
