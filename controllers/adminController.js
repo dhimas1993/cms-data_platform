@@ -7,13 +7,30 @@ const RequestConnect = require('../models/request_connect')
 module.exports = {
     viewDashboard : async (req,res) => {
         try {
-            const currentMenu = req.route.path.toString();
-            const all_user = await User.find()
-            const user_pro = await User.find({ subscribe: "PRO" })
-            const user_free = await User.find({ subscribe: "FREE" })
-            console.log(all_user)
+            const currentMenu = req.route.path.toString()
+            const all_user = await User.find().populate('subscribe')
+            
+            let pro = []
+            let free = []
+            let enterprise = []
+
+            for (let i = 0; i < all_user.length; i++) {
+                const item = all_user[i];
+                if(item.subscribe.name == 'FREE'){
+                    free.push(item)
+                } else if(item.subscribe.name == 'PRO'){
+                    pro.push(item)
+                } else if(item.subscribe.name == 'ENTERPRISE'){
+                    enterprise.push(item)
+                }
+            }
+
             res.render('admin/dashboard/view_dashboard', {
-                currentMenu
+                currentMenu,
+                all_user,
+                pro,
+                free,
+                enterprise
             })
         } catch (error) {
             console.log(error.message)

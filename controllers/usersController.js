@@ -1,6 +1,7 @@
 const User = require('../models/user.model')
 const Link = require('../models/link.model')
 const RequestConnect = require('../models/request_connect')
+const amountSubscribe = require('../models/amount_subscribe.model')
 
 const nodemailer = require('nodemailer')
 
@@ -8,7 +9,7 @@ module.exports = {
     login : async (req,res) => {
         try {
             const {email} = req.body
-            const response = await User.findOne({ email : email })
+            const response = await User.findOne({ email : email, status: "active" })
             
             if(response !== null ){
                 res.status(200).json('SUCCESS')
@@ -166,6 +167,19 @@ module.exports = {
             }
         } catch (error) {
             res.status(500).json(error.message)
+        }
+    },
+    subscribe : async (req,res) => {
+        try {
+            const {id} = req.body
+            const response = await User.findOne({_id : id}).populate('subscribe')
+            
+            await amountSubscribe.create({
+                
+            })
+            
+        } catch (error) {
+            res.status(404).json(error.message)
         }
     }
 }

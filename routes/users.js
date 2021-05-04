@@ -7,5 +7,6 @@ router.post('/confirmationCode/:id', userController.confirmationCode)
 router.get('/getUser/:id', userController.getUser)
 router.post('/database', userController.database)
 router.post('/request_connect', userController.requestConnect)
+router.post('/subscribe', userController.subscribe)
 
 module.exports = router
