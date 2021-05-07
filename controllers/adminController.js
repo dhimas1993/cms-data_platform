@@ -3,8 +3,62 @@ const User = require('../models/user.model')
 const Subscribe = require('../models/subscribe.model')
 const Link = require('../models/link.model')
 const RequestConnect = require('../models/request_connect')
+const bcrypt = require('bcrypt')
 
 module.exports = {
+    viewSignin : async (req,res) => {
+        try {
+            const currentMenu = req.route.path.toString();
+            const alertMessage = req.flash('alertMessage')
+            const alertStatus = req.flash('alertStatus')
+            const alert = {message: alertMessage, status: alertStatus}
+            if(req.session.user == null || req.session.user == null){
+                res.render('index', {
+                    currentMenu,
+                    alert,
+                    title : 'CMS-DATA | Login'
+                })
+            } else {
+                res.redirect('/admin/dashboard')
+            }
+        } catch (error) {
+            res.redirect('/admin/signin')
+        }
+    },
+    actionSignin : async (req,res) => {
+        try {
+            const {email, password} = req.body
+            const admin = await Admin.findOne({ email : email})
+            if(!admin){
+                req.flash('alertMessage', 'Email not found')
+                req.flash('alertStatus', 'success')
+                res.redirect('/')
+            }
+            const isPasswordMatch = await bcrypt.compare(password, admin.password)
+            if(!isPasswordMatch){
+                req.flash('alertMessage', 'Email or Password is wrong!!')
+                req.flash('alertStatus', 'success')
+                res.redirect('/')
+            }
+
+            req.session.user = {
+                id: admin.id,
+                name: admin.name,
+                email: admin.email
+            }
+
+            res.redirect('/admin/dashboard')
+        } catch (error) {
+            req.flash('alertMessage', `${error.message}`)
+            req.flash('alertStatus', 'danger')
+            res.redirect('/admin/signin')
+        }
+    },
+    actionLogout : async (req,res) => {
+        req.session.destroy()
+        res.redirect('/admin/signin')
+    },
+
     viewDashboard : async (req,res) => {
         try {
             const currentMenu = req.route.path.toString()
@@ -30,10 +84,11 @@ module.exports = {
                 all_user,
                 pro,
                 free,
-                enterprise
+                enterprise,
+                user: req.session.user
             })
         } catch (error) {
-            console.log(error.message)
+            res.redirect('admin/dashboard/view_dashboard')
         }
     },
 
@@ -51,7 +106,7 @@ module.exports = {
                 admin
             })
         } catch (error) {
-            console.log(error.message)
+            res.redirect('admin/admin/vie_admin')
         }
     },
     addAdmin: async (req,res) => {
@@ -130,7 +185,7 @@ module.exports = {
                 user
             })
         } catch (error) {
-            console.log(error.message)
+            res.redirect('admin/user/view_user')
         }
     },
     addUser: async (req,res) => {
@@ -184,7 +239,7 @@ module.exports = {
                 subscribe
             })
         } catch (error) {
-            console.log(error.message)
+            res.redirect('admin/subscribe/view_subscribe')
         }
     },
     addSubscribes: async (req,res) => {
@@ -237,7 +292,7 @@ module.exports = {
                 link
             })
         } catch (error) {
-            console.log(error.message)
+            res.redirect('admin/link/view_link')
         }
     },
     addLink : async (req,res) => {
@@ -316,7 +371,7 @@ module.exports = {
                 link
             })
         } catch (error) {
-            console.log(error.message)
+            res.redirect('admin/request_connect/view_requestConnect')
         }
     },
     addRequestConnect : async (req,res) => {
@@ -383,7 +438,7 @@ module.exports = {
             const currentMenu = req.route.path.toString();
             res.render('admin/media/view_media',{currentMenu})
         } catch (error) {
-            console.log(error.message)
+            res.redirect('admin/media/view_media')
         }
     },
     
@@ -392,7 +447,7 @@ module.exports = {
             const currentMenu = req.route.path.toString();
             res.render('admin/category-media/view_category-media',{currentMenu})
         } catch (error) {
-            console.log(error.message)
+            res.redirect('admin/category-media/view_category-media')
         }
     },
     

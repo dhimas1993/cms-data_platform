@@ -23,6 +23,7 @@ app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
 app.use(express.json());
+app.use(cors())
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -32,7 +33,7 @@ app.use(session({
     secret: 'keyboard cat',
     resave: false,
     saveUninitialized:true,
-    cookie: {maxAge: 3600000 * 2}
+    cookie: {maxAge: 3600000 * 66}
 }))
 app.use(flash())
 app.locals.baseURL = process.env.WEB_URI_DEV

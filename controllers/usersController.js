@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt')
 const User = require('../models/user.model')
 const Link = require('../models/link.model')
 const RequestConnect = require('../models/request_connect')
@@ -8,16 +9,24 @@ const nodemailer = require('nodemailer')
 module.exports = {
     login : async (req,res) => {
         try {
-            const {email} = req.body
-            const response = await User.findOne({ email : email, status: "active" })
-            
-            if(response !== null ){
-                res.status(200).json('SUCCESS')
+            const { email, password } = req.body
+            const users = await User.findOne({
+                email: email,
+                status: 'active',
+            })
+            // console.log(users)
+            if(users === null){
+                return res.send('FAILED')
             } else {
-                res.status(201).json('FAIL')
+                const match = await bcrypt.compare(password, users.password)
+                if(match){
+                    return res.status(200).json(users)
+                } else {
+                    return res.status(500).json('PASSWORD NOT MATCH')
+                }
             }
         } catch (error) {
-            res.status(200).json(error.message)
+            res.status(500).json(error)
         }
     },
     register : async (req,res) => {
@@ -49,13 +58,12 @@ module.exports = {
                         <h3>Halo ${name}</h3>
                         <h3>Silehkan Klik link berikut untuk konfirmasi email anda</h3>
                         </br> 
-                        <a href="${process.env.WEB_URI}/confirmationCode/${token}">Click Here !!</a> 
+                        <a href="${process.env.WEB_URI}/confirmation-email/${token}"> Click Here !! </a> 
                     </div>
                 `
             };
-            
-            if(user_exist == null){
-                const post = await User.create({
+            if(!user_exist){
+                await User.create({
                     name : name, 
                     companyName : companyName, 
                     jobPosition : jobPosition, 
@@ -63,7 +71,7 @@ module.exports = {
                     password : password, 
                     token: token
                 })
-
+                
                 transporter.sendMail(mailOptions, (err, info) => {
                     if (err) throw err;
                     console.log('Email sent: ' + info.response);
@@ -72,6 +80,7 @@ module.exports = {
                         data : "SUCCEESS"
                     })
                 });
+                
             } else {
                 res.status(200).json('FAIL')
             }
@@ -97,7 +106,7 @@ module.exports = {
     },
     getUser : async (req,res) => {
         try {
-            const {id} = req.params
+            const {id} = req.body
             const response = await User.findOne({ _id : id })
             .populate('subscribe')
 
@@ -171,15 +180,50 @@ module.exports = {
     },
     subscribe : async (req,res) => {
         try {
-            const {id} = req.body
+            const {id, email, name} = req.body
             const response = await User.findOne({_id : id}).populate('subscribe')
-            
-            await amountSubscribe.create({
-                
-            })
-            
+
+            let transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: 'support@bubu.com',
+                    pass: 'BubuSukses1'
+                }
+            });
+
+            let mailOptions = {
+                from: 'upport@bubu.com',
+                to: response.email,
+                subject: 'SID_DATA Subscribe Request',
+                html: `
+                    <div>
+                        <h4>Halo Team</h4>
+                        <h4>Silehkan Klik link berikut untuk konfirmasi email anda</h4>
+
+                        </br>
+                        
+                        <p>Account dibawah ini menyatakan setuju dengan ingin berlangganan</p>
+                        <h4> Name           : ${response.name} </h4>
+                        <h4> email          : ${response.email} </h4>
+                        <h4> subscribe type : PRO </h4>
+                    </div>
+                `
+            };
+
+            if(response){
+                transporter.sendMail(mailOptions, (err, info) => {
+                    if (err) throw err;
+                    console.log('Email sent: ' + info.response);
+                    res.send({
+                        status : 200,
+                        data : "SUCCEESS"
+                    })
+                });
+            } else {
+                res.status(500).json('FAIL')
+            }
         } catch (error) {
-            res.status(404).json(error.message)
+            res.status(201).json({"error" : error.message})
         }
     }
 }

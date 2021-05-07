@@ -1,9 +1,14 @@
 const router = require('express').Router()
 const adminController = require('../controllers/adminController')
+const auth = require('../middlewares/auth')
 
+router.get('/signin', adminController.viewSignin)
+router.post('/signin', adminController.actionSignin)
+router.use(auth)
+router.get('/logout', adminController.actionLogout)
 router.get('/dashboard', adminController.viewDashboard)
 
-router.get('/admin', adminController.viewAdmin)
+router.get('/admin', adminController.viewAdmin) 
 router.post('/admin', adminController.addAdmin)
 router.put('/admin', adminController.editAdmin)
 router.delete('/admin/:id', adminController.deleteAdmin)
