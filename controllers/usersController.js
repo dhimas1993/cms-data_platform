@@ -55,10 +55,23 @@ module.exports = {
                 subject: 'Confirmation Email',
                 html: `
                     <div>
-                        <h3>Halo ${name}</h3>
-                        <h3>Silehkan Klik link berikut untuk konfirmasi email anda</h3>
+                        <h3>Hi ${name}</h3>
+                        <p>Thank you for signing up to SID! Please click the link below to confirm your email address and start your trial. Use our platform to see brand new data every week and help you unlock opportunities in the private sector. </p>
                         </br> 
                         <a href="${process.env.WEB_URI}/confirmation-email/${token}"> Click Here !! </a> 
+                        </br>
+                        <h4>To enjoy more benefits, switch over to our Pro plan to get</h4>
+                        <ul>
+                            <li>Unlimited Dealsourcing</li>
+                            <li>Signalling</li>
+                            <li>Quarterly Startup Report</li>
+                        </ul>
+
+                        <p>For further inquiries, please reach out our team at startupindonesia@bubu.com</p>
+                        <p>We are #ConnectingWithImpact 
+                        Follow us on Instagram (@startupindonesia_co), Facebook & LinkedIn Startup Indonesia</p>
+                        <p>Best Regards,
+                        StartupIndonesia.co Committee</p>
                     </div>
                 `
             };
