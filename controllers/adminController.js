@@ -85,7 +85,7 @@ module.exports = {
                 pro,
                 free,
                 enterprise,
-                user: req.session.user
+                users: req.session.user
             })
         } catch (error) {
             res.redirect('admin/dashboard/view_dashboard')
@@ -103,7 +103,8 @@ module.exports = {
             res.render('admin/admin/view_admin', {
                 currentMenu,
                 alert,
-                admin
+                admin,
+                users: req.session.user
             })
         } catch (error) {
             res.redirect('admin/admin/vie_admin')
@@ -182,7 +183,8 @@ module.exports = {
                 subscribe,
                 currentMenu,
                 alert,
-                user
+                user,
+                users: req.session.user
             })
         } catch (error) {
             res.redirect('admin/user/view_user')
@@ -236,7 +238,8 @@ module.exports = {
             res.render('admin/subscribe/view_subscribe',{
                 currentMenu,
                 alert,
-                subscribe
+                subscribe,
+                users: req.session.user
             })
         } catch (error) {
             res.redirect('admin/subscribe/view_subscribe')
@@ -289,7 +292,8 @@ module.exports = {
                 currentMenu,
                 alert,
                 subscribe,
-                link
+                link,
+                users: req.session.user
             })
         } catch (error) {
             res.redirect('admin/link/view_link')
@@ -368,7 +372,8 @@ module.exports = {
                 currentMenu,
                 alert,
                 subscribe,
-                link
+                link,
+                users: req.session.user
             })
         } catch (error) {
             res.redirect('admin/request_connect/view_requestConnect')
