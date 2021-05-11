@@ -40,6 +40,7 @@ app.locals.baseURL = process.env.WEB_URI_DEV
 
 // live
 const uri = process.env.ATLAS_URI
+
 // development
 // const uri = process.env.ATLAS_URI_DEV
 mongoose.connect(uri, {useNewUrlParser : true,useUnifiedTopology: true, useCreateIndex: true})
