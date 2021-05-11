@@ -206,7 +206,7 @@ module.exports = {
 
             let mailOptions = {
                 from: 'upport@bubu.com',
-                to: response.email,
+                to: 'startupindonesia@bubu.com',
                 subject: 'SID_DATA Subscribe Request',
                 html: `
                     <div>
