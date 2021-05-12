@@ -122,8 +122,10 @@ module.exports = {
             const {id} = req.body
             const response = await User.findOne({ _id : id })
             .populate('subscribe')
+            const subs = response.subscribe.name
 
             if(response){
+                response.token = subs
                 res.status(200).json(response)
             } else {
                 res.status(200).json('FAIL')
