@@ -37,8 +37,10 @@ module.exports = {
             let transporter = nodemailer.createTransport({
                 service: 'gmail',
                 auth: {
-                    user: 'support@bubu.com',
-                    pass: 'BubuSukses1'
+                    // user: 'support@bubu.com',
+                    // pass: 'BubuSukses1'
+                    user: 'startupindonesia@bubu.com',
+                    pass: 'bubusid_!'
                 }
             });
 
@@ -50,7 +52,7 @@ module.exports = {
             }
 
             let mailOptions = {
-                from: 'support@bubu.com',
+                from: 'startupindonesia@bubu.com',
                 to: email,
                 subject: 'Confirmation Email',
                 html: `
