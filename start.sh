@@ -1,2 +1,2 @@
-cd /staging/frontend/cms-data
-yarn start
+cd /home/ubuntu/staging/frontend/cms-data_platform
+npm run start

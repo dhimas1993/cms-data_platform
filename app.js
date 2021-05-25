@@ -10,8 +10,8 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors')
 
-var Mixpanel = require('mixpanel');
-var mixpanel = Mixpanel.init('a0fa51cd1c34fefd617384953be96c67', { "host": "api-eu.mixpanel.com" });
+// var Mixpanel = require('mixpanel');
+// var mixpanel = Mixpanel.init('a0fa51cd1c34fefd617384953be96c67', { "host": "api-eu.mixpanel.com" });
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
