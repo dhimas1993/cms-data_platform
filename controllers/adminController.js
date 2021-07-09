@@ -2,6 +2,7 @@ const Admin = require('../models/admin.model')
 const User = require('../models/user.model')
 const Subscribe = require('../models/subscribe.model')
 const Link = require('../models/link.model')
+const Captable = require('../models/captable_model')
 const RequestConnect = require('../models/request_connect')
 const bcrypt = require('bcrypt')
 
@@ -287,7 +288,7 @@ module.exports = {
             const subscribe = await Subscribe.find()
             const link = await Link.find().populate('subscribe')
 
-            console.log(link)
+            // console.log(link)
             res.render('admin/link/view_link',{
                 currentMenu,
                 alert,
@@ -435,6 +436,86 @@ module.exports = {
             req.flash('alertMessage', `${error.message}`)
             req.flash('alertStatus', 'danger')
             res.redirect('/admin/link')
+        }
+    },
+
+    viewCaptable : async (req,res) => {
+        try {
+            const currentMenu = req.route.path.toString();
+            const alertMessage = req.flash('alertMessage')
+            const alertStatus = req.flash('alertStatus')
+            const alert = {message: alertMessage, status: alertStatus}
+            const subscribe = await Subscribe.find()
+            const captable = await Captable.find().populate('subscribe')
+
+            // console.log(link)
+            res.render('admin/captable/view_captable',{
+                currentMenu,
+                alert,
+                subscribe,
+                captable,
+                users: req.session.user
+            })
+        } catch (error) {
+            res.redirect('admin/captable/view_captable')
+        }
+    },
+    addCaptable : async (req,res) => {
+        try {
+            const {subscribe, name, link} = req.body
+
+            await Captable.create({
+                name, link, subscribe
+            })
+            
+            req.flash('alertMessage', "SUCCESS ADD")
+            req.flash('alertStatus', 'success')
+            res.redirect('/admin/captable')
+        } catch (error) {
+            req.flash('alertMessage', `${error.message}`)
+            req.flash('alertStatus', 'danger')
+            res.redirect('/admin/captable')
+        }
+    },
+    editCaptable: async (req,res) => {
+        try {
+            const {id, name,link, subscribe} = req.body
+            const _captable = await Captable.findOne({ _id : id });
+            
+            if(subscribe){
+                _captable.name = name
+                _captable.link = link
+                _captable.subscribe = subscribe
+                await _captable.save()
+            } else {
+                _captable.name = name
+                _captable.link = link
+                await _captable.save()
+            }
+            
+            req.flash('alertMessage', "SUCCESS EDIT")
+            req.flash('alertStatus', 'success')
+            res.redirect('/admin/captable')
+        } catch (error) {
+            req.flash('alertMessage', `${error.message}`)
+            req.flash('alertStatus', 'danger')
+            res.redirect('/admin/captable')
+        }
+    },
+    deleteCaptable: async(req,res) => {
+        try {
+            const {id} = req.params
+            const captable = await Captable.findOne({
+                _id : id
+            })
+            await captable.remove()
+            req.flash('alertMessage', "SUCCESS EDIT")
+            req.flash('alertStatus', 'success')
+            res.redirect('/admin/captable')
+        } catch (error) {
+            req.flash('alertMessage', `${error.message}`)
+            req.flash('alertStatus', 'danger')
+            res.redirect('/admin/captable')
         }
     },
 

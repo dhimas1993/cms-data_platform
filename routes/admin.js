@@ -31,6 +31,11 @@ router.post('/request-connect', adminController.addRequestConnect)
 router.put('/request-connect', adminController.editRequestConnect)
 router.delete('/request-connect/:id', adminController.deleteRequestConnect)
 
+router.get('/captable', adminController.viewCaptable)
+router.post('/captable', adminController.addCaptable)
+router.put('/captable', adminController.editCaptable)
+router.delete('/captable/:id', adminController.deleteCaptable)
+
 router.get('/media', adminController.viewMedia)
 router.get('/category-media', adminController.viewCategoryMedia)
 

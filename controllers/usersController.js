@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt')
 const User = require('../models/user.model')
 const Link = require('../models/link.model')
+const Captable = require('../models/captable_model')
 const RequestConnect = require('../models/request_connect')
 const amountSubscribe = require('../models/amount_subscribe.model')
 
@@ -242,5 +243,34 @@ module.exports = {
         } catch (error) {
             res.status(201).json({"error" : error.message})
         }
-    }
+    },
+    captable : async (req,res) => {
+        try {
+            const {id} = req.body
+            const response = await User.findOne({ _id : id }).populate('subscribe')
+            const link = await Captable.find().populate('subscribe')
+            
+            let pro = []
+            let free = []
+
+            for (let i = 0; i < link.length; i++) {
+                const item = link[i].subscribe.name;
+                const data = link[i]
+                
+                if(item == 'FREE'){
+                    free.push(data)
+                } else if(item == 'PRO'){
+                    pro.push(data)
+                }
+            }
+
+            if(response.subscribe.name == 'FREE'){
+                res.status(200).json(free)
+            } else {
+                res.status(200).json(pro)
+            }
+        } catch (error) {
+            res.status(500).json(error.message)
+        }
+    },
 }
