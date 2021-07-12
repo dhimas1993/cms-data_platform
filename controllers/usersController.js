@@ -89,11 +89,12 @@ module.exports = {
                 })
                 
                 transporter.sendMail(mailOptions, (err, info) => {
-                    if (err) throw err;
-                    console.log('Email sent: ' + info.response);
+                    if (err)
+                        throw err
+                    console.log('Email sent: ' + info.response)
                     res.send({
-                        status : 200,
-                        data : "SUCCEESS"
+                        status: 200,
+                        data: "SUCCEESS"
                     })
                 });
                 
