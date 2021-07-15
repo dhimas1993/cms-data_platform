@@ -236,6 +236,7 @@ module.exports = {
             
             let pro = []
             let free = []
+            let enterprise = []
 
             for (let i = 0; i < link.length; i++) {
                 const item = link[i].subscribe.name;
@@ -245,13 +246,17 @@ module.exports = {
                     free.push(data)
                 } else if(item == 'PRO'){
                     pro.push(data)
+                } else if(item == 'ENTERPRISE'){
+                    enterprise.push(data)
                 }
             }
 
-            if(response.subscribe.name == 'FREE'){
+            if(response.subscribe.name === 'FREE'){
                 res.status(200).json(free)
-            } else {
+            } else if(response.subscribe.name === "PRO"){
                 res.status(200).json(pro)
+            } else {
+                res.status(200).json(enterprise)
             }
         } catch (error) {
             res.status(500).json(error.message)
