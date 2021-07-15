@@ -105,6 +105,66 @@ module.exports = {
             res.status(500).json(error.message)
         }
     },
+    forgetPassword : async (req,res) => {
+        try {
+            const {email} = req.body
+            const response = await User.findOne({email : email}).populate('subscribe')
+
+            let transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: 'support@bubu.com',
+                    pass: 'BubuSukses1'
+                }
+            });
+
+            let mailOptions = {
+                from: 'support@bubu.com',
+                to: response.email,
+                subject: 'SID_DATA Forget Password',
+                html: `
+                    <div>
+                        <h4>Halo Team</h4>
+                        <h4>Silehkan Klik link berikut untuk merubah password anda anda</h4>
+
+                        </br>
+                        
+                        <p>Account dibawah ini menyatakan setuju dengan ingin menrubah password</p>
+                        <h4> Link           : <a href="https://data.startupindonesia.co/confirmation-password/${response._id}" target"_blank">Click here !!</a> </h4>
+                    </div>
+                `
+            };
+
+            if(response){
+                transporter.sendMail(mailOptions, (err, info) => {
+                    if (err) throw err;
+                    console.log('Email sent: ' + info.response);
+                    res.send({
+                        status : 200,
+                        data : "SUCCEESS"
+                    })
+                });
+            } else {
+                res.status(500).json('FAIL')
+            }
+            // res.status(200).json(response.email)
+        } catch (error) {
+            res.status(201).json({"error" : error.message})
+        }
+    },
+    confirmationPassword : async (req,res) => {
+        try {
+            const { id, password } = req.body
+            const users = await User.findOne({
+                _id : id,
+            })
+            users.password = password
+            await users.save()
+            res.status(200).json('SUCCESS')
+        } catch (error) {
+            res.status(404).json(error)
+        }
+    },
     confirmationCode : async (req,res) => {
         try {
             const {id} = req.params
